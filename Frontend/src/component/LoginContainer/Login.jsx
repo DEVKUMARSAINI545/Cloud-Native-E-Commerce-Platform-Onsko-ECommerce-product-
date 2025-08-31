@@ -151,7 +151,7 @@ export default function Login() {
       <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div className="mt-12 flex flex-col items-center">
-            <h1 className="text-2xl xl:text-3xl font-extrabold">Sign In Dev Kumar Saini</h1>
+            <h1 className="text-2xl xl:text-3xl font-extrabold">Sign In</h1>
             <div className="w-full flex-1 mt-8">
              
               <div className="my-12 border-b text-center">
