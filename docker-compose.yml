@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  frontend:
+    image:
+    ports:
+    - "80:80"
+    environment:
+      - VITE_BACKEND_URI=
+  backend:
+    image:
+    ports:
+    - "80:80"
+    environment:
+      - MONGODB_URI=mongodb+srv://DevSaini:dev1256@cluster0.pugztbw.mongodb.net/onsko
+      - PORT=3000
+      - JWT_SECRET=devsaini1256oiuoiuyfghvbnkloiuytfdghjkl
+      - IMAGEKIT_PUBLIC_KEY=public_+kbNS5EXmIxczVGSE191mnneD+I=
+      - IMAGEKIT_PRIVATE_KEY=private_9Vpa0x1TcIWbJGSg07LtXRdV2e4=
+      - IMAGEKIT_ID=mkjyuczro
+      - IMAGEKIT_URL=https://ik.imagekit.io/mkjyuczro
+      - FRONTEND_URI=http://localhost:5173
+ 
+
+
