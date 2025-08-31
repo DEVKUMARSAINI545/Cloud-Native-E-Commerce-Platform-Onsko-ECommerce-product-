@@ -1,15 +1,23 @@
 version: '3.8'
+
 services:
   frontend:
-    image:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}-frontend:${IMAGE_TAG}
     ports:
-    - "80:80"
+      - "3000:80"   # Host 3000 → Container 80 (nginx serve karega build)
     environment:
-      - VITE_BACKEND_URI=
+      - VITE_BACKEND_URI=http://backend:3000   # container network ke liye backend
+
   backend:
-    image:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}-backend:${IMAGE_TAG}
     ports:
-    - "80:80"
+      - "5000:3000"   # Host 5000 → Container 3000
     environment:
       - MONGODB_URI=mongodb+srv://DevSaini:dev1256@cluster0.pugztbw.mongodb.net/onsko
       - PORT=3000
@@ -18,7 +26,4 @@ services:
       - IMAGEKIT_PRIVATE_KEY=private_9Vpa0x1TcIWbJGSg07LtXRdV2e4=
       - IMAGEKIT_ID=mkjyuczro
       - IMAGEKIT_URL=https://ik.imagekit.io/mkjyuczro
-      - FRONTEND_URI=http://localhost:5173
- 
-
-
+      - FRONTEND_URI=http://frontend:80   # container network ke liye frontend
