@@ -1,4 +1,4 @@
- # -----------------------
+# -----------------------
 # 1️⃣ Create S3 Bucket
 # -----------------------
 resource "aws_s3_bucket" "frontend" {
@@ -6,6 +6,7 @@ resource "aws_s3_bucket" "frontend" {
   tags = {
     Name = "Frontend Bucket"
   }
+  force_destroy = true
 }
 
 # -----------------------
@@ -34,27 +35,9 @@ resource "aws_s3_bucket_public_access_block" "frontend_block" {
   restrict_public_buckets = true
 }
 
-# -----------------------
-# 4️⃣ Bucket Policy to allow public read
-# -----------------------
-# resource "aws_s3_bucket_policy" "frontend_policy" {
-#   bucket = aws_s3_bucket.frontend.id
-
-#   policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Sid       = "PublicReadGetObject"
-#         Effect    = "Allow"
-#         Principal = "*"
-#         Action    = "s3:GetObject"
-#         Resource  = "${aws_s3_bucket.frontend.arn}/*"
-#       }
-#     ]
-#   })
-# }
-
  
+ 
+
 
 # -----------------------
 # 5️⃣ Upload frontend/dist files to S3
@@ -89,10 +72,10 @@ resource "aws_s3_object" "frontend_objects" {
 # 6️⃣ CloudFront Origin Access Control (OAC)
 # -----------------------
 resource "aws_cloudfront_origin_access_control" "main" {
-  name                          = "s3-cloudfront-oac"
+  name                              = "s3-cloudfront-oac-12"
   origin_access_control_origin_type = "s3"
-  signing_behavior              = "always"
-  signing_protocol              = "sigv4"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 # -----------------------
@@ -112,9 +95,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = aws_s3_bucket.frontend.bucket
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = aws_s3_bucket.frontend.bucket
     viewer_protocol_policy = "redirect-to-https"
 
     forwarded_values {
@@ -161,5 +144,32 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     Environment = "production"
   }
 
- 
+
+}
+
+resource "aws_s3_bucket_policy" "this" {
+  bucket = aws_s3_bucket.frontend.id
+
+  policy = jsonencode({
+    Version = "2008-10-17",
+    Id      = "PolicyForCloudFrontPrivateContent",
+    Statement = [
+      {
+        Sid    = "AllowCloudFrontServicePrincipal",
+        Effect = "Allow",
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        },
+        Action   = "s3:GetObject",
+        Resource = "arn:aws:s3:::${aws_s3_bucket.frontend.bucket}/*",
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = "${aws_cloudfront_distribution.s3_distribution.arn}"
+          }
+        }
+      }
+    ]
+
+  })
+
 }
