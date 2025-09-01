@@ -51,19 +51,15 @@ app.use(cors({
 // Middleware to handle preflight requests
 app.options("*", cors());
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, 'Frontend', 'dist')));
+ 
 
 // API routes
 app.use("/api/v1/onsko", userRouter);
 
 // Uncomment this if you want to serve index.html for all other routes
-app.get("*", (_, res) => {
-    res.sendFile(path.resolve(__dirname, 'Frontend', 'dist', 'index.html'));
-});
-
+ 
 // Start the server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT , () => {
   console.log(`Server running on port ${PORT}`);
 });
