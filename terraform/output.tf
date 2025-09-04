@@ -8,3 +8,7 @@ output "s3_bucket_name" {
 output "cloudfront_distribution_id" {
   value = aws_cloudfront_distribution.s3_distribution.id
 }
+output "aws_ecr_repository_url" {
+  value = aws_ecr_repository.frontend.repository_url
+  
+}
