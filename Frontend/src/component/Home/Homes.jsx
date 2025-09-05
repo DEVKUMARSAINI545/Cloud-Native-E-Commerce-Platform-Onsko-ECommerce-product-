@@ -16,11 +16,7 @@ export default function Homes() {
  
             
           const response = await axiosInstance.get("/getuser", {params:{email}})
-    
-            
-            
-            
-            
+     
             if (response.data.success === true) {
             setProfileImage(response.data.user.profileImage);
           }

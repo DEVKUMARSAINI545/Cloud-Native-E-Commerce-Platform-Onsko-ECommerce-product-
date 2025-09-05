@@ -28,41 +28,46 @@ resource "aws_ecs_task_definition" "service" {
       portMappings = [
         {
           containerPort = var.container_port 
-          hostPort      = 80
+          hostPort      = var.host_port 
           protocol      = "tcp"
         }
       ]
-      # environment=[
-      #   {
-      #      name = "MONGODB_URI" 
-      #      value="mongodb+srv://DevSaini:dev1256@cluster0.pugztbw.mongodb.net/onsko"
+      environment=[
+        {
+           name = "MONGODB_URI" 
+           value="mongodb+srv://DevSaini:dev1256@cluster0.pugztbw.mongodb.net/onsko"
 
-      #   },
-      #   {
-      #      name="PORT"
-      #      value="3000" 
-      #   },
-      #   {
-      #       name = "JWT_SECRET"
-      #       value = "devsaini1256oiuoiuyfghvbnkloiuytfdghjkl"
-      #   },
-      #   {
-      #       name = "IMAGEKIT_PUBLIC_KEY"
-      #       value = "public_+kbNS5EXmIxczVGSE191mnneD+I="
-      #   },
-      #    {
-      #       name = "IMAGEKIT_PRIVATE_KEY"
-      #       value = "private_9Vpa0x1TcIWbJGSg07LtXRdV2e4="
-      #   },
-      #    {
-      #       name = "IMAGEKIT_ID"
-      #       value = "mkjyuczro"
-      #   },
-      #    {
-      #       name = "IMAGEKIT_URL"
-      #       value = "https://ik.imagekit.io/mkjyuczro"
-      #   },
-      # ]
+        },
+        {
+           name="PORT"
+           value="3000" 
+        },
+        {
+            name = "JWT_SECRET"
+            value = "devsaini1256oiuoiuyfghvbnkloiuytfdghjkl"
+        },
+        {
+            name = "IMAGEKIT_PUBLIC_KEY"
+            value = "public_+kbNS5EXmIxczVGSE191mnneD+I="
+        },
+         {
+            name = "IMAGEKIT_PRIVATE_KEY"
+            value = "private_9Vpa0x1TcIWbJGSg07LtXRdV2e4="
+        },
+         {
+            name = "IMAGEKIT_ID"
+            value = "mkjyuczro"
+        },
+         {
+            name = "IMAGEKIT_URL"
+            value = "https://ik.imagekit.io/mkjyuczro"
+        },
+         {
+            name = "FRONTEND_URI"
+            value = "http://ecs-alb-437145697.ap-south-1.elb.amazonaws.com"
+        },
+
+      ]
          logConfiguration = {
         logDriver = "awslogs"
         options = {

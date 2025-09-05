@@ -188,8 +188,9 @@ const login = async (req, res) => {
  
         const options = {
             httpOnly: true,
-            secure: true,
-            sameSite: 'None', // Allow the cookie to be sent cross-origin
+            secure: false,
+            sameSite: 'lax', // Allow the cookie to be sent cross-origin
+              path: "/",
             
         };
 

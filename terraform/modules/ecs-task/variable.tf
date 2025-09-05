@@ -16,6 +16,11 @@ variable "container_port" {
   type = number
   
 }
+variable "host_port" {
+  description = "container port"
+  type = number
+  
+}
 variable "image" {
   description = "repo image path"
   type = string

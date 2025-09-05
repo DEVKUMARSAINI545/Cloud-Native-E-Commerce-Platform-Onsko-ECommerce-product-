@@ -34,23 +34,9 @@ app.use(cookieparser());
 
 
 // const allowedOrigins = ["https://onsko-e-commerce-project.vercel.app"];
-const allowedOrigins = process.env.FRONTEND_URI;
+const allowedOrigins = [process.env.FRONTEND_URI];
 
-// Enable CORS
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true, // Allow cookies and authentication headers
-}));
-
-// Middleware to handle preflight requests
-app.options("*", cors());
-
+ app.use(cors({ origin: allowedOrigins, credentials: true }));
  
 
 // API routes

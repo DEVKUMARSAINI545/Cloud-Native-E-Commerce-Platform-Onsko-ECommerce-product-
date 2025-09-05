@@ -41,13 +41,13 @@ export default function Login() {
  
           const response = await axiosInstance.post('/login',{email,password})
           // Check backend status codes from the JSON response
-        
+       
           const { status, data } = response;
           
     
         
           if (data.success) {
-              setLoading(true);
+            setLoading(true);
            
               Swal.fire({
                   icon: 'success',
@@ -137,14 +137,7 @@ export default function Login() {
         }, 2000);
     };
 
-
-
-
-
-
-
-
-
+ 
     return (
         <> 
  <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
