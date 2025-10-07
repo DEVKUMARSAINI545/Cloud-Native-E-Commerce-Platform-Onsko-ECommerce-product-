@@ -6,7 +6,7 @@ set -euo pipefail  # Exit on errors, undefined vars, and pipe failures
 # ====== CONFIGURATION ======
 INSTANCE_ID="i-030da7d31a1dbbffc"
 ENV_FILE="../frontend/.env.docker"
-PORT=5000  # backend port
+PORT=3000  # backend port
 
 # ====== FUNCTIONS ======
 get_ec2_public_ip() {

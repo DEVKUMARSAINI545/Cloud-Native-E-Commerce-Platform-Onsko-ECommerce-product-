@@ -9,7 +9,7 @@ set -euo pipefail  # Exit on errors, undefined vars, and pipe failures
 # ====== CONFIGURATION ======
 INSTANCE_ID="i-030da7d31a1dbbffc"
 ENV_FILE="../backend/.env.docker"
-PORT=5173
+PORT=80
 
 # ====== FUNCTIONS ======
 get_ec2_public_ip() {
@@ -21,12 +21,12 @@ get_ec2_public_ip() {
 
 update_frontend_url() {
     local ip="$1"
-    if grep -q "^FRONTEND_URL=" "$ENV_FILE"; then
-        sed -i -e "s|^FRONTEND_URL=.*|FRONTEND_URL=\"http://${ip}:${PORT}\"|g" "$ENV_FILE"
-        echo "Updated FRONTEND_URL to http://${ip}:${PORT} in $ENV_FILE"
+    if grep -q "^FRONTEND_URI=" "$ENV_FILE"; then
+        sed -i -e "s|^FRONTEND_URI=.*|FRONTEND_URI=\"http://${ip}:${PORT}\"|g" "$ENV_FILE"
+        echo "Updated FRONTEND_URI to http://${ip}:${PORT} in $ENV_FILE"
     else
-        echo "FRONTEND_URL not found in $ENV_FILE. Adding it."
-        echo "FRONTEND_URL=\"http://${ip}:${PORT}\"" >> "$ENV_FILE"
+        echo "FRONTEND_URI not found in $ENV_FILE. Adding it."
+        echo "FRONTEND_URI=\"http://${ip}:${PORT}\"" >> "$ENV_FILE"
     fi
 }
 
@@ -40,11 +40,11 @@ fi
 PUBLIC_IP=$(get_ec2_public_ip)
 
 # Get current FRONTEND_URL in the file
-CURRENT_URL=$(grep "^FRONTEND_URL=" "$ENV_FILE" || echo "")
+CURRENT_URL=$(grep "^FRONTEND_URI=" "$ENV_FILE" || echo "")
 
 # Update only if different
-if [[ "$CURRENT_URL" != "FRONTEND_URL=\"http://${PUBLIC_IP}:${PORT}\"" ]]; then
+if [[ "$CURRENT_URL" != "FRONTEND_URI=\"http://${PUBLIC_IP}:${PORT}\"" ]]; then
     update_frontend_url "$PUBLIC_IP"
 else
-    echo "FRONTEND_URL is already up to date: $CURRENT_URL"
+    echo "FRONTEND_URI is already up to date: $CURRENT_URL"
 fi
