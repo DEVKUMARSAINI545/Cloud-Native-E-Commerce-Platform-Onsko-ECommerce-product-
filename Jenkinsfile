@@ -1,60 +1,94 @@
+@Library('Shared') _
 pipeline {
-    agent {label "dev"}
-
+    agent any
+   
+    
+    parameters {
+        string(name: 'FRONTEND_DOCKER_TAG', defaultValue: '', description: 'Setting docker image for latest push')
+        string(name: 'BACKEND_DOCKER_TAG', defaultValue: '', description: 'Setting docker image for latest push')
+    }
+    
     stages {
-        stage('Hello') {
+        stage("Validate Parameters") {
             steps {
-                echo 'Hello World'
-            }
-        }
-        stage("Project cloning"){
-            steps{
-                git url: "https://github.com/DEVKUMARSAINI545/3TierApplicationDeploy.git", branch: "main"
-            }
-        }
-        stage("Build Frontend Image"){
-            steps{
-                dir("Frontend"){
-                    sh "docker build -t frontend:latest ."
-                }
-            }
-        }
-           stage("Build Backend Image"){
-            steps{
-                dir("Backend"){
-                    sh "docker build -t backend:latest ."
-                }
-            }
-        }
-            stage("Create ECR by Terraform"){
-                steps{
-                    dir("terraform"){
-                        sh "terraform init"
-                        sh "terraform plan"
-                        sh "terraform apply -auto-approve -target=module.frontend_repo -target=module.backend_repo"
+                script {
+                    if (params.FRONTEND_DOCKER_TAG == '' || params.BACKEND_DOCKER_TAG == '') {
+                        error("FRONTEND_DOCKER_TAG and BACKEND_DOCKER_TAG must be provided.")
                     }
                 }
             }
-            stage("Push the Image on ECR"){
-                steps{
-                    sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 952346071341.dkr.ecr.ap-south-1.amazonaws.com"
-                    sh "docker tag frontend:latest 952346071341.dkr.ecr.ap-south-1.amazonaws.com/frontend-repo:latest"
-                    sh "docker push 952346071341.dkr.ecr.ap-south-1.amazonaws.com/frontend-repo:latest"
+        }
+        stage("Workspace cleanup"){
+            steps{
+                script{
+                    cleanWs()
                 }
             }
-            stage("push Backend Image on ECR"){
-                steps{
-                    sh "docker tag backend:latest 952346071341.dkr.ecr.ap-south-1.amazonaws.com/backend-repo:latest"
-                    sh "docker push 952346071341.dkr.ecr.ap-south-1.amazonaws.com/backend-repo:latest"
+        }
+        
+        stage('Git: Code Checkout') {
+            steps {
+                script{
+                    code_checkout("https://github.com/DEVKUMARSAINI545/Cloud-Native-E-Commerce-Platform-Onsko-ECommerce-product-.git","main")
                 }
             }
-            stage("Create Task defination and cluster "){
-                steps{
-                    dir("terraform"){
-
-                        sh "terraform apply -auto-approve -target=module.frontend-task -target=module.backend-task  -target=aws_ecs_cluster.main -target=module.frontend_service -target=module.backend_service"
+        }
+      
+  
+        stage('Exporting environment variables') {
+            parallel{
+                stage("Backend env setup"){
+                    steps {
+                        script{
+                            dir("Automation"){
+                                sh "bash updatebackendnew.sh"
+                            }
+                        }
+                    }
+                }
+                
+                stage("Frontend env setup"){
+                    steps {
+                        script{
+                            dir("Automation"){
+                                sh "bash updatefrontendnew.sh"
+                            }
+                        }
                     }
                 }
             }
+        }
+        
+        stage("Docker: Build Images"){
+            steps{
+                script{
+                        dir('Backend'){
+                            docker_build("onsko-backend-beta","${params.BACKEND_DOCKER_TAG}","devsaini255")
+                        }
+                    
+                        dir('Frontend'){
+                            docker_build("onsko-frontend-beta","${params.FRONTEND_DOCKER_TAG}","devsaini255")
+                        }
+                }
+            }
+        }
+        
+        stage("Docker: Push to DockerHub"){
+            steps{
+                script{
+                    docker_push("onsko-backend-beta","${params.BACKEND_DOCKER_TAG}","devsaini255") 
+                    docker_push("onsko-frontend-beta","${params.FRONTEND_DOCKER_TAG}","devsaini255")
+                }
+            }
+        }
+    }
+    post{
+        success{
+            archiveArtifacts artifacts: '*.xml', followSymlinks: false
+            build job: "onsko-CD", parameters: [
+                string(name: 'FRONTEND_DOCKER_TAG', value: "${params.FRONTEND_DOCKER_TAG}"),
+                string(name: 'BACKEND_DOCKER_TAG', value: "${params.BACKEND_DOCKER_TAG}")
+            ]
+        }
     }
 }
