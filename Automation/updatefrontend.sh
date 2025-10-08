@@ -1,15 +1,15 @@
- #!/bin/bash
-# Script to update BACKEND_URL in .env.docker with the public IP of an EC2 instance
-
-set -euo pipefail  # Exit on errors, undefined vars, and pipe failures
+#!/bin/bash
+set -euo pipefail
 
 # ====== CONFIGURATION ======
-INSTANCE_ID="i-030da7d31a1dbbffc"
-ENV_FILE="../frontend/.env.docker"
-PORT=3000  # backend port
+INSTANCE_ID="i-0e7be9c55eafcc7cf"   # EC2 instance id (if using EC2)
+ENV_FILE="../Frontend/.env"
+BACKEND_PORT=31100
+BACKEND_PATH="/api/v1/onsko"
 
 # ====== FUNCTIONS ======
-get_ec2_public_ip() {
+get_backend_ip() {
+    # For EC2 public IP
     aws ec2 describe-instances \
         --instance-ids "$INSTANCE_ID" \
         --query 'Reservations[0].Instances[0].PublicIpAddress' \
@@ -18,12 +18,14 @@ get_ec2_public_ip() {
 
 update_backend_url() {
     local ip="$1"
-    if grep -q "^VITE_BACKEND_URI==" "$ENV_FILE"; then
-        sed -i -e "s|^VITE_BACKEND_URI==.*|VITE_BACKEND_URI==\"http://${ip}:${PORT}\"|g" "$ENV_FILE"
-        echo "Updated VITE_BACKEND_URI= to http://${ip}:${PORT} in $ENV_FILE"
+    local url="http://${ip}:${BACKEND_PORT}${BACKEND_PATH}"
+
+    if grep -q "^VITE_BACKEND_URI=" "$ENV_FILE"; then
+        sed -i -e "s|^VITE_BACKEND_URI=.*|VITE_BACKEND_URI=\"${url}\"|g" "$ENV_FILE"
+        echo "Updated VITE_BACKEND_URI to ${url} in $ENV_FILE"
     else
-        echo "VITE_BACKEND_URI= not found in $ENV_FILE. Adding it."
-        echo "VITE_BACKEND_URI==\"http://${ip}:${PORT}\"" >> "$ENV_FILE"
+        echo "VITE_BACKEND_URI not found. Adding it."
+        echo "VITE_BACKEND_URI=\"${url}\"" >> "$ENV_FILE"
     fi
 }
 
@@ -33,15 +35,17 @@ if [ ! -f "$ENV_FILE" ]; then
     exit 1
 fi
 
-# Get current EC2 public IP
-PUBLIC_IP=$(get_ec2_public_ip)
+# Fetch backend IP
+BACKEND_IP=$(get_backend_ip)
 
-# Get current BACKEND_URL in the file
-CURRENT_URL=$(grep "^VITE_BACKEND_URI==" "$ENV_FILE" || echo "")
+CURRENT_URL=$(grep "^VITE_BACKEND_URI=" "$ENV_FILE" || echo "")
 
-# Update only if different
-if [[ "$CURRENT_URL" != "VITE_BACKEND_URI==\"http://${PUBLIC_IP}:${PORT}\"" ]]; then
-    update_backend_url "$PUBLIC_IP"
+NEW_URL="VITE_BACKEND_URI=\"http://${BACKEND_IP}:${BACKEND_PORT}${BACKEND_PATH}\""
+
+if [[ "$CURRENT_URL" != "$NEW_URL" ]]; then
+    update_backend_url "$BACKEND_IP"
 else
-    echo "VITE_BACKEND_URI= is already up to date: $CURRENT_URL"
+    echo "VITE_BACKEND_URI is already up to date: $CURRENT_URL"
 fi
+
+

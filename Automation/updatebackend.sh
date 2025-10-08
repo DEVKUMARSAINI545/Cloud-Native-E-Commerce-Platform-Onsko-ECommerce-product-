@@ -7,9 +7,9 @@
 set -euo pipefail  # Exit on errors, undefined vars, and pipe failures
 
 # ====== CONFIGURATION ======
-INSTANCE_ID="i-030da7d31a1dbbffc"
-ENV_FILE="../backend/.env.docker"
-PORT=80
+INSTANCE_ID="i-0e7be9c55eafcc7cf"
+ENV_FILE="../Backend/.env"
+PORT=31000
 
 # ====== FUNCTIONS ======
 get_ec2_public_ip() {

@@ -15,9 +15,12 @@ spec:
     spec:
       containers:
       - name: backend
-        image: devsaini255/new-onsko-backend:v4
+        image: devsaini255/product-website-backend:v3
         ports:
         - containerPort: 3000
+        env:
+         - name: MONGODB_URI
+           value: "mongodb+srv://DevSaini:1256@cluster0.pugztbw.mongodb.net/onsko"
 
 ---
 
@@ -33,4 +36,5 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-  type: ClusterIP
+      nodePort: 31100
+  type: NodePort

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: devsaini255/new-onsko-frontend:v4
+        image: devsaini255/product-website:v5
         ports:
         - containerPort: 80
 
@@ -33,4 +33,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-  type: ClusterIP
+      nodePort: 31000
+  type: NodePort
