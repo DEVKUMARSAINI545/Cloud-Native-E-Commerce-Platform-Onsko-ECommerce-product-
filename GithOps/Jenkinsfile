@@ -39,13 +39,13 @@ pipeline {
                 script{
                     dir('kubernetes'){
                         sh """
-                            sed -i -e s/wanderlust-backend-beta.*/wanderlust-backend-beta:${params.BACKEND_DOCKER_TAG}/g backend.yaml
+                            sed -i -e "s|devsaini255/onsko-backend-beta.*|devsaini255/onsko-backend-beta:${params.BACKEND_DOCKER_TAG}|g" backend.yaml
                         """
                     }
                     
                     dir('kubernetes'){
                         sh """
-                            sed -i -e s/wanderlust-frontend-beta.*/wanderlust-frontend-beta:${params.FRONTEND_DOCKER_TAG}/g frontend.yaml
+                          sed -i -e "s|devsaini255/onsko-frontend-beta.*|devsaini255/onsko-frontend-beta:${params.FRONTEND_DOCKER_TAG}|g" frontend.yaml
                         """
                     }
                     
@@ -56,7 +56,7 @@ pipeline {
         stage("Git: Code update and push to GitHub"){
             steps{
                 script{
-                    withCredentials([gitUsernamePassword(credentialsId: 'Github-cred', gitToolName: 'Default')]) {
+                    withCredentials([gitUsernamePassword(credentialsId: 'Github', gitToolName: 'Default')]) {
                         sh '''
                         echo "Checking repository status: "
                         git status
