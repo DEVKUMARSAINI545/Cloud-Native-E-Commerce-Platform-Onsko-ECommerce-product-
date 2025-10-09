@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ====== CONFIGURATION ======
-INSTANCE_ID="i-0e7be9c55eafcc7cf"   # EC2 instance id (if using EC2)
+INSTANCE_ID="i-0b1fc592ee9f0ae18"   # EC2 instance id (if using EC2)
 ENV_FILE="../Frontend/.env"
 BACKEND_PORT=31100
 BACKEND_PATH="/api/v1/onsko"
