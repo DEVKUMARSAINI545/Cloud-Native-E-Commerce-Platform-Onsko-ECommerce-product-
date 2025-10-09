@@ -37,13 +37,13 @@ pipeline {
         stage("Update: Kubernetes manifests"){
             steps{
                 script{
-                    dir('kubernetes'){
+                    dir('k8s'){
                         sh """
                             sed -i -e "s|devsaini255/onsko-backend-beta.*|devsaini255/onsko-backend-beta:${params.BACKEND_DOCKER_TAG}|g" backend.yaml
                         """
                     }
                     
-                    dir('kubernetes'){
+                    dir('k8s'){
                         sh """
                           sed -i -e "s|devsaini255/onsko-frontend-beta.*|devsaini255/onsko-frontend-beta:${params.FRONTEND_DOCKER_TAG}|g" frontend.yaml
                         """
