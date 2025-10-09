@@ -41,7 +41,11 @@ pipeline {
                     steps {
                         script{
                             dir("Automation"){
-                                sh "bash updatebackend.sh"
+                                withCredentials(aws[credentialsId: "AWSCred", varibale: "AWS"]){   
+                                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                                     sh "bash updatebackend.sh"
+                                }
                             }
                         }
                     }
@@ -51,7 +55,11 @@ pipeline {
                     steps {
                         script{
                             dir("Automation"){
-                                sh "bash updatefrontend.sh"
+                                   withCredentials(aws[credentialsId: "AWSCred", varibale: "AWS"]){   
+                                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                                         sh "bash updatefrontend.sh"
+                                }
                             }
                         }
                     }
