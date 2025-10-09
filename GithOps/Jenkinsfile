@@ -39,13 +39,13 @@ pipeline {
                 script{
                     dir('k8s'){
                         sh """
-                            sed -i -e "s|devsaini255/onsko-backend-beta.*|devsaini255/onsko-backend-beta:${params.BACKEND_DOCKER_TAG}|g" backend.yaml
+                            sed -i -e "s|devsaini255/onsko-backend-beta.*|devsaini255/onsko-backend-beta:${params.BACKEND_DOCKER_TAG}|g" backend.yml
                         """
                     }
                     
                     dir('k8s'){
                         sh """
-                          sed -i -e "s|devsaini255/onsko-frontend-beta.*|devsaini255/onsko-frontend-beta:${params.FRONTEND_DOCKER_TAG}|g" frontend.yaml
+                          sed -i -e "s|devsaini255/onsko-frontend-beta.*|devsaini255/onsko-frontend-beta:${params.FRONTEND_DOCKER_TAG}|g" frontend.yml
                         """
                     }
                     
