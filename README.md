@@ -60,8 +60,10 @@
 
 - <b>Create 1 Master machine on AWS with 2CPU, 8GB of RAM (t2.large) and 29 GB of storage and install Docker on it.</b>
 #
-- <b>Open the below ports in security group of master machine and also attach same security group to Jenkins worker node (We will create worker node shortly)</b>
-![image](https://github.com/user-attachments/assets/4e5ecd37-fe2e-4e4b-a6ba-14c7b62715a3)
+- <b>Open the below ports in security group of  Jenkins worker node (We will create worker node shortly)</b>
+![image](/images/securitygroup.png)
+- <b>Open the below ports in security group of master machine </b>
+![image](/images/jenkinsport.png)
 
 > [!Note]
 > We are creating this master machine because we will configure Jenkins master, eksctl, EKS cluster creation from here.
@@ -250,7 +252,7 @@ sudo apt-get install trivy -y
   kubectl get svc -n argocd
   ```
   - <b> Check the port where ArgoCD server is running and expose it on security groups of a worker node</b>
-  ![image](https://github.com/user-attachments/assets/a2932e03-ebc7-42a6-9132-82638152197f)
+  ![image](/images/argocdsvc.png)
   - <b>Access it on browser, click on advance and proceed with</b>
   ```bash
   <public-ip-worker>:<port>
