@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: devsaini255/product-website-backend:v3
+        image: devsaini255/onsko-backend-beta:v3
         ports:
         - containerPort: 3000
         env:
