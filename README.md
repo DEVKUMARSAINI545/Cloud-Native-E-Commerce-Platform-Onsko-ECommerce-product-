@@ -524,7 +524,7 @@ kubectl get secret --namespace prometheus stable-grafana -o jsonpath="{.data.adm
 ## Clean Up
 - <b id="Clean">Delete eks cluster</b>
 ```bash
-eksctl delete cluster --name=onsko-cluster --region=us-south-1
+eksctl delete cluster --name onsko-cluster --region ap-south-1
 ```
 
 #
