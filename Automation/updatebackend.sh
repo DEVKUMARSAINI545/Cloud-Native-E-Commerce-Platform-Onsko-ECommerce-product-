@@ -9,7 +9,7 @@ set -euo pipefail  # Exit on errors, undefined vars, and pipe failures
 # ====== CONFIGURATION ======
 INSTANCE_ID="i-0cb005c43e2a2fec8"
 ENV_FILE="../Backend/.env"
-PORT=31000
+PORT=30000
 
 # ====== FUNCTIONS ======
 get_ec2_public_ip() {
