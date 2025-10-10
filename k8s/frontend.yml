@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: devsaini255/onsko-frontend-beta:v5
+        image: devsaini255/onssko-frontend-beta:v10
         ports:
         - containerPort: 80
 
