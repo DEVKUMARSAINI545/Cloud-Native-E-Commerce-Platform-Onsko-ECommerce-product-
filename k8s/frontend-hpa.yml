@@ -5,7 +5,7 @@ metadata:
   namespace: onsko
 spec:
   scaleTargetRef:
-    apiVersioin: apps/v1
+    apiVersion: apps/v1
     kind: Deployment
     name: frontend
   minReplicas: 2
