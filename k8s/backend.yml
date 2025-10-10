@@ -18,6 +18,11 @@ spec:
         image: devsaini255/onsko-backend-beta:v100
         ports:
         - containerPort: 3000
+        resources:
+          requests:
+            cpu: "250m"
+          limits:
+            cpu: "500m"
         env:
          - name: MONGODB_URI
            value: "mongodb+srv://DevSaini:1256@cluster0.pugztbw.mongodb.net/onsko"
