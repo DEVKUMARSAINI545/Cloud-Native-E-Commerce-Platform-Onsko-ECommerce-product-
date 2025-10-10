@@ -41,12 +41,9 @@ pipeline {
                     steps {
                         script{
                             dir("Automation"){
-                               withCredentials([[
-                $class: 'AmazonWebServicesCredentialsBinding',
-                credentialsId: 'AWSCred'
-            ]]) {
-                sh 'bash updatebackend.sh'
-            }
+                               
+                                 sh 'bash updatebackend.sh'
+          
                             }
                         }
                     }
@@ -56,12 +53,9 @@ pipeline {
                     steps {
                         script{
                             dir("Automation"){
-                                    withCredentials([[
-                $class: 'AmazonWebServicesCredentialsBinding',
-                credentialsId: 'AWSCred'
-            ]]) {
-                sh 'bash updatefrontend.sh'
-            }
+                                     
+                                 sh 'bash updatefrontend.sh'
+         
                             }
                         }
                     }

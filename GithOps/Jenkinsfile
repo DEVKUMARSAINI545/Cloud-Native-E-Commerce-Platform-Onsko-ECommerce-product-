@@ -1,79 +1,108 @@
 @Library('Shared') _
 pipeline {
     agent any
-    
+
     parameters {
         string(name: 'FRONTEND_DOCKER_TAG', defaultValue: '', description: 'Frontend Docker tag of the image built by the CI job')
         string(name: 'BACKEND_DOCKER_TAG', defaultValue: '', description: 'Backend Docker tag of the image built by the CI job')
     }
 
     stages {
-        stage("Workspace cleanup"){
-            steps{
-                script{
+        stage("Workspace cleanup") {
+            steps {
+                script {
                     cleanWs()
                 }
             }
         }
-        
+
         stage('Git: Code Checkout') {
             steps {
-                script{
-                    code_checkout("https://github.com/DEVKUMARSAINI545/Cloud-Native-E-Commerce-Platform-Onsko-ECommerce-product-.git","main")
+                script {
+                    code_checkout("https://github.com/DEVKUMARSAINI545/Cloud-Native-E-Commerce-Platform-Onsko-ECommerce-product-.git", "main")
                 }
             }
         }
-        
+
         stage('Verify: Docker Image Tags') {
             steps {
-                script{
+                script {
                     echo "FRONTEND_DOCKER_TAG: ${params.FRONTEND_DOCKER_TAG}"
                     echo "BACKEND_DOCKER_TAG: ${params.BACKEND_DOCKER_TAG}"
                 }
             }
         }
-        
-        
-        stage("Update: Kubernetes manifests"){
-            steps{
-                script{
-                    dir('k8s'){
+
+        stage("Update: Kubernetes manifests") {
+            steps {
+                script {
+                    dir('k8s') {
                         sh """
-                            sed -i -e "s|devsaini255/onsko-backend-beta.*|devsaini255/onsko-backend-beta:${params.BACKEND_DOCKER_TAG}|g" backend.yml
+                            sed -i -e 's|onsko-backend-beta.*|onsko-backend-beta:${params.BACKEND_DOCKER_TAG}|g' backend.yml
+                        """
+                        sh """
+                            sed -i -e 's|onsko-frontend-beta.*|onsko-frontend-beta:${params.FRONTEND_DOCKER_TAG}|g' frontend.yml
                         """
                     }
-                    
-                    dir('k8s'){
-                        sh """
-                          sed -i -e "s|devsaini255/onsko-frontend-beta.*|devsaini255/onsko-frontend-beta:${params.FRONTEND_DOCKER_TAG}|g" frontend.yml
-                        """
-                    }
-                    
                 }
             }
         }
-        
-      stage("Git: Code update and push to GitHub") {
-    steps {
-        script {
-            withCredentials([usernamePassword(credentialsId: 'Github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                sh """
-                git status
-                git add .
-                git commit -m "Updated environment variables" || echo "Nothing to commit"
-                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/DEVKUMARSAINI545/Cloud-Native-E-Commerce-Platform-Onsko-ECommerce-product-.git main
-                """
+
+        stage("Git: Code update and push to GitHub") {
+            steps {
+                script {
+                    withCredentials([gitUsernamePassword(credentialsId: 'Github', gitToolName: 'Default')]) {
+                        sh """
+                            git status
+                            git add .
+                            git commit -m "Updated environment variables by Dev Kumar Saini" || echo "Nothing to commit by Dev Kumar Saini"
+                            git push https://github.com/DEVKUMARSAINI545/Cloud-Native-E-Commerce-Platform-Onsko-ECommerce-product-.git main
+                        """
+                    }
+                }
             }
         }
     }
-}
-    }
-  post {
+
+    // post {
+    //     success {
+    //         emailext(
+    //             attachLog: true,
+    //             to: 'devsaini27806@gmail.com',
+    //             from: 'devsaini27806@gmail.com',
+    //             subject: "✅ Onsko Application Deployed - ${currentBuild.result}",
+    //             mimeType: 'text/html',
+    //             body: """
+    //                 <h2>Build Successful!</h2>
+    //                 <p><b>Project:</b> ${env.JOB_NAME}</p>
+    //                 <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+    //                 <p><b>Build URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+    //             """
+    //         )
+    //     }
+
+    //     failure {
+    //         emailext(
+    //             attachLog: true,
+    //             to: 'devsaini27806@gmail.com',
+    //             from: 'devsaini27806@gmail.com',
+    //             subject: "❌ Onsko Application Failed - ${currentBuild.result}",
+    //             mimeType: 'text/html',
+    //             body: """
+    //                 <h2>Build Failed!</h2>
+    //                 <p><b>Project:</b> ${env.JOB_NAME}</p>
+    //                 <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+    //                 <p><b>Check Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+    //             """
+    //         )
+    //     }
+    // }
+     post {
         success {
             script {
                 emailext attachLog: true,
                 from: 'devsaini27806@gmail.com',
-                subject: "Wanderlust Application has been updated and deployed - '${currentBuild.result}'",
+                subject: "Onsko Application has been updated and deployed - '${currentBuild.result}'",
                 body: """
                     <html>
                     <body>
@@ -89,7 +118,7 @@ pipeline {
                     </body>
                     </html>
             """,
-            to: 'trainwithshubham@gmail.com',
+            to: 'devsaini27806@gmail.com',
             mimeType: 'text/html'
             }
         }
@@ -97,7 +126,7 @@ pipeline {
             script {
                 emailext attachLog: true,
                 from: 'devsaini27806@gmail.com',
-                subject: "Wanderlust Application build failed - '${currentBuild.result}'",
+                subject: "Onsko Application build failed - '${currentBuild.result}'",
                 body: """
                     <html>
                     <body>
@@ -110,9 +139,10 @@ pipeline {
                     </body>
                     </html>
             """,
-            to: 'trainwithshubham@gmail.com',
+            to: 'devsaini27806@gmail.com',
             mimeType: 'text/html'
             }
         }
-    }
+    
+}
 }
