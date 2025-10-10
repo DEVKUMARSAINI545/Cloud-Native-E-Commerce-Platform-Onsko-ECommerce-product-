@@ -7,7 +7,7 @@
 set -euo pipefail  # Exit on errors, undefined vars, and pipe failures
 
 # ====== CONFIGURATION ======
-INSTANCE_ID="i-00a208c12d919d9b0"
+INSTANCE_ID="i-0cb005c43e2a2fec8"
 ENV_FILE="../Backend/.env"
 PORT=31000
 
