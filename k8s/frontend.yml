@@ -18,6 +18,11 @@ spec:
         image: devsaini255/onsko-frontend-beta:v100
         ports:
         - containerPort: 80
+        resources:
+          requests:
+            cpu: "250m"
+          limits:
+            cpu: "500m"
 
 ---
 
