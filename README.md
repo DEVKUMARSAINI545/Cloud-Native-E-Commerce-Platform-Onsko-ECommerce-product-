@@ -27,13 +27,13 @@
 
 ### How pipeline will look after deployment:
 - <b>CI pipeline to build and push</b>
-![image](https://github.com/user-attachments/assets/20542d8b-0701-43ed-b2f8-82f8ed28d053)
+![image](/images/onskoCI.png)
 
 - <b>CD pipeline to update application version</b>
-![image](https://github.com/user-attachments/assets/8fd13807-622e-45f7-af23-dcc1ba30ca5d)
+![image](/images/onskoCD.png)
 
 - <b>ArgoCD application for deployment on EKS</b>
-![image](https://github.com/user-attachments/assets/1ea9d486-656e-40f1-804d-2651efb54cf6)
+![image](/images/argocd.png)
 
 #
 > [!Important]
