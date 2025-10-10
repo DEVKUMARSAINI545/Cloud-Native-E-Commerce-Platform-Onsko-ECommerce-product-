@@ -2,7 +2,7 @@
 
  Onsko E-Commerce is a simple MERN E Commerce  website   This project is aimed to help people to contribute in open source, upskill in react and also master git.
 
-![Preview Image](https://github.com/krishnaacharyaa/wanderlust/assets/116620586/17ba9da6-225f-481d-87c0-5d5a010a9538)
+![Preview Image](/images/onsko-logo.webp)
 #
 
 # Wanderlust Mega Project End to End Implementation
@@ -22,7 +22,6 @@
 - SonarQube (Quality)
 - Trivy (Filesystem Scan)
 - ArgoCD (CD)
-- Redis (Caching)
 - AWS EKS (Kubernetes)
 - Helm (Monitoring using grafana and prometheus)
 
@@ -389,37 +388,38 @@ chmod 777 /var/run/docker.sock
 
   ![image](https://github.com/user-attachments/assets/0f36aafd-bab9-4ef8-ba5d-3eb56d850604)
   - <b> Once your cluster is added to argocd, go to argocd console <mark>Settings --> Clusters</mark> and verify it</b>
-  ![image](https://github.com/user-attachments/assets/4490b632-19fd-4499-a341-fabf8488d13c)
+  ![image](/images/cluster.png)
 #
 - <b>Go to <mark>Settings --> Repositories</mark> and click on <mark>Connect repo</mark> </b>
-![image](https://github.com/user-attachments/assets/cc8728e5-546b-4c46-bd4c-538f4cd6a63d)
-![image](https://github.com/user-attachments/assets/eb3646e2-db84-4439-a11a-d4168080d9cc)
-![image](https://github.com/user-attachments/assets/a07f8703-5ef3-4524-aaa7-39a139335eb7)
+![image](/images/repoinargocd.png)
+![image](/images/repoURL.png)
+![image](/images/giturl.png)
 > [!Note]
 > Connection should be successful
 
 - <b>Now, go to <mark>Applications</mark> and click on <mark>New App</mark></b>
 
-![image](https://github.com/user-attachments/assets/ec2d7a51-d78f-4947-a90b-258944ad59a2)
+![image](/images/application-name.png)
 
 > [!Important]
 > Make sure to click on the <mark>Auto-Create Namespace</mark> option while creating argocd application
 
-![image](https://github.com/user-attachments/assets/55dcd3c2-5424-4efb-9bee-1c12bbf7f158)
-![image](https://github.com/user-attachments/assets/3e2468ff-8cb2-4bda-a8cc-0742cd6d0cae)
+![image](/images/repopart.png)
+![image](/images/clustername.png)
 
 - <b>Congratulations, your application is deployed on AWS EKS Cluster</b>
-![image](https://github.com/user-attachments/assets/bc2d9680-fe00-49f9-81bf-93c5595c20cc)
-![image](https://github.com/user-attachments/assets/1ea9d486-656e-40f1-804d-2651efb54cf6)
-- <b>Open port 31000 and 31100 on worker node and Access it on browser</b>
+![image](/images/argocd.png)
+![image](/images/argocd2.png)
+- <b>Open port 30000 and 31100 on worker node and Access it on browser</b>
 ```bash
-<worker-public-ip>:31000
+<worker-public-ip>:30000
 ```
-![image](https://github.com/user-attachments/assets/a4b2a4b4-e1aa-4b22-ac6b-f40003d0723a)
-![image](https://github.com/user-attachments/assets/06f9f1c8-094d-4d9f-a9d8-256fb18a9ae4)
-![image](https://github.com/user-attachments/assets/64394f90-8610-44c0-9f63-c3a21eb78f55)
+![image](/images/eks.png)
+![image](/images/onsko-backend-postman.png)
+![image](/images/onsko-backend.png)
+![image](/images/onsko.png)
 - <b>Email Notification</b>
-![image](https://github.com/user-attachments/assets/0ab1ef47-f939-4618-8651-6aa9274721f4)
+![image](/images/email.png)
 
 #
 ## How to monitor EKS cluster, kubernetes components and workloads using prometheus and grafana via HELM (On Master machine)
@@ -513,16 +513,16 @@ kubectl get secret --namespace prometheus stable-grafana -o jsonpath="{.data.adm
 
 #
 - Now, view the Dashboard in Grafana
-![image](https://github.com/user-attachments/assets/d2e7ff2f-059d-48c4-92bb-9711943819c4)
-![image](https://github.com/user-attachments/assets/3d6652d0-7795-4fe9-8919-f33eac88db73)
-![image](https://github.com/user-attachments/assets/13321ee5-5d7b-4976-b409-25d3b865a42a)
-![image](https://github.com/user-attachments/assets/75a22e4b-ae81-4cad-9c92-21dd90d126a8)
+![image](/images/grafana.png)
+![image](/images/grafanadashboard.png)
+![image](/images/grafanapart2.png)
+ 
 
 #
 ## Clean Up
 - <b id="Clean">Delete eks cluster</b>
 ```bash
-eksctl delete cluster --name=wanderlust --region=us-west-1
+eksctl delete cluster --name=onsko-cluster --region=us-south-1
 ```
 
 #
